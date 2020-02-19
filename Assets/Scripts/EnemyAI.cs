@@ -1,44 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+
 
 public class EnemyAI : MonoBehaviour
 {
-public float speed;
-    private float waitTime;
-    public float startWaitTime;
 
-    public Transform moveSpot;
-    public float minX;
-    public float maxX;
-    public float minY;
-    public float maxY;
-    public float minZ;
-    public float maxZ;
+    public Transform[] points;
+    private int destPoint = 0;
+    private NavMeshAgent agent;
+
+
     void Start()
     {
-        waitTime = startWaitTime;
-        //moveSpot.position = new Vector2(Random.Range(minX,maxX),Random.Range(minY,maxY));
+        agent = GetComponent<NavMeshAgent>();
 
-        moveSpot.position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
-
+        agent.autoBraking = false;
+        destPoint = 1;
     }
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, moveSpot.position, speed * Time.deltaTime);
+        Vector3 fwd = transform.TransformDirection(Vector3.forward);
 
-        if (Vector3.Distance(transform.position, moveSpot.position) < 0.2f)
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+            GotoNextPoint();
+    }
+
+    void GotoNextPoint()
+    {
+        
+        // Returns if no points have been set up
+        if (agent.destination != points[destPoint].position)
         {
-            if (waitTime <= 0)
-            {
-                moveSpot.position = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ));
-                waitTime = startWaitTime;
-            }
-            else
-            {
-                waitTime -= Time.deltaTime;
-            }
+            StartCoroutine(MyWaitMethod());
+            agent.destination = points[destPoint].position;
         }
+
+        // Set the agent to go to the currently selected destination.
+        
+        //Debug.Log("I'm headed to: " + agent.destination);
+
+        // Choose the next point in the array as the destination,
+        // cycling to the start if necessary.
+        destPoint = (destPoint + 1) % points.Length;
+        Debug.Log("I'm at: " + destPoint);
+    }
+
+    IEnumerator MyWaitMethod()
+    {
+        agent.speed = 0;
+        Debug.Log("wait 1");
+        yield return new WaitForSeconds(1);
+        
+        agent.speed = 3;
+    }
+
+    public void PursuePlayer(Transform playerTransform)
+    {
+        agent.destination = playerTransform.position;
     }
 }
