@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
+    public GameObject playerBody;
     public float xSensitivity = 15;
     public float ySensitivity = 15;
     public float minimumX = -360;
@@ -13,14 +14,9 @@ public class MouseLook : MonoBehaviour
     float rotationX = 0;
     float rotationY = 0;
 
-    private List<float> rotArrayX = new List<float>();  //holds a certain number of target rotation points
-    private List<float> rotArrayY = new List<float>();
-    float rotAverageX;
-    float rotAverageY;
-
-    public float frameCounter = 20;
-
     Quaternion originalRotation; //stores the original rotation of the camera before updating rotation
+    Quaternion originalBodyRotation;
+    Vector3 cameraOffset;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,12 +26,15 @@ public class MouseLook : MonoBehaviour
             rb.freezeRotation = true;
         }
         originalRotation = transform.localRotation;
+        cameraOffset = transform.position - playerBody.transform.position;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         GetCameraInput();
+        UpdateCameraPosition();
     }
 
     void GetCameraInput()
@@ -43,40 +42,22 @@ public class MouseLook : MonoBehaviour
         rotationX += Input.GetAxis("Mouse X") * xSensitivity;
         rotationY += Input.GetAxis("Mouse Y") * ySensitivity;
 
-        rotArrayX.Add(rotationX);
-        rotArrayY.Add(rotationY);
-
-        if (rotArrayY.Count >= frameCounter)
-        {
-            rotArrayY.RemoveAt(0); //removes oldest frame
-        }
-        if (rotArrayX.Count >= frameCounter)
-        {
-            rotArrayX.RemoveAt(0);
-        }
-
-        for (int i = 0; i < rotArrayY.Count; i++)
-        {
-            rotAverageY += rotArrayY[i];
-        }
-        for (int j = 0; j < rotArrayX.Count; j++)
-        {
-            rotAverageX += rotArrayX[j];
-        }
-
-        //takes the average of the last 'n' frames worth of X/Y values
-        rotAverageY /= rotArrayY.Count;
-        rotAverageX /= rotArrayX.Count;
-
         //keeps the camera from going out of bounds
-        rotAverageY = ClampAngle(rotAverageY, minimumY, maximumY);
+        rotationY    = ClampAngle(rotationY, minimumY, maximumY);
         //rotAverageX = ClampAngle(rotAverageX, minimumX, maximumX);
 
         //Angle Axis: "Creates a rotation which rotates angle degrees around axis."
-        Quaternion yQuaternion = Quaternion.AngleAxis(rotAverageY, Vector3.left);
-        Quaternion xQuaternion = Quaternion.AngleAxis(rotAverageX, Vector3.up);
+        Quaternion yQuaternion = Quaternion.AngleAxis(rotationY, Vector3.left);
+        Quaternion xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
 
         GetComponent<Camera>().transform.localRotation = originalRotation * xQuaternion * yQuaternion;
+        originalBodyRotation.eulerAngles = new Vector3(playerBody.transform.rotation.x, transform.rotation.eulerAngles.y, playerBody.transform.rotation.z);
+        playerBody.transform.rotation = originalBodyRotation;
+    }
+
+    void UpdateCameraPosition()
+    {
+        transform.position = playerBody.transform.position + cameraOffset;
     }
 
     public static float ClampAngle(float angle, float min, float max)

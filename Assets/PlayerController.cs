@@ -22,26 +22,26 @@ public class PlayerController : MonoBehaviour
 
     void GetMovementInput()
     {
-        if(Input.GetKey("up"))
+        if(Input.GetKey("w"))
         {
-            Debug.Log("W");
+            xzMovement += transform.forward;
         }
         if (Input.GetKey("a"))
         {
-            Debug.Log("a");
+            xzMovement -= transform.right;
         }
         if (Input.GetKey("s"))
         {
-            Debug.Log("s");
+            xzMovement -= transform.forward;
         }
         if (Input.GetKey("d"))
         {
-            Debug.Log("d");
+            xzMovement += transform.right;
         }
         moveHorizontal = Input.GetAxis("Horizontal");
         moveVertical = Input.GetAxis("Vertical");
-        Vector3 xzMovement = new Vector3(moveHorizontal, 0, moveVertical);
         transform.position += xzMovement * Time.deltaTime * movementSpeed;
+        xzMovement = new Vector3(0, 0, 0);
     }
 
 }
