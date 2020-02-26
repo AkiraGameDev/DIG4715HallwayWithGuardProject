@@ -17,7 +17,7 @@ public class InteractRaycast : MonoBehaviour
             {
                 interactable.ShowInteractability();
 
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire1"))
                 {
                     interactable.Interact();
                 }
