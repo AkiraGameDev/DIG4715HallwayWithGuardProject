@@ -41,7 +41,12 @@ public class MouseLook : MonoBehaviour
     {
         rotationX += Input.GetAxis("Mouse X") * xSensitivity;
         rotationY += Input.GetAxis("Mouse Y") * ySensitivity;
-
+        
+        if(Input.GetAxisRaw("Horizontal2") != 0 || Input.GetAxisRaw("Vertical2") != 0)
+        {
+            rotationX += Input.GetAxisRaw("Horizontal2");
+            rotationY += Input.GetAxisRaw("Vertical2");
+        }
         //keeps the camera from going out of bounds
         rotationY    = ClampAngle(rotationY, minimumY, maximumY);
         //rotAverageX = ClampAngle(rotAverageX, minimumX, maximumX);

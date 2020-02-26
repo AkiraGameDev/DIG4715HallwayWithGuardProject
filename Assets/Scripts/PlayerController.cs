@@ -25,19 +25,19 @@ public class PlayerController : MonoBehaviour
 
     void GetMovementInput()
     {
-        if(Input.GetKey("w"))
+        if(Input.GetKey("w")|| Input.GetAxisRaw("Vertical") < -0.4)
         {
             xzMovement += transform.forward;
         }
-        if (Input.GetKey("a"))
+        if (Input.GetKey("a") || Input.GetAxisRaw("Horizontal") < -0.4 )
         {
             xzMovement -= transform.right;
         }
-        if (Input.GetKey("s"))
+        if (Input.GetKey("s") || Input.GetAxisRaw("Vertical") > 0.4)
         {
             xzMovement -= transform.forward;
         }
-        if (Input.GetKey("d"))
+        if (Input.GetKey("d") || Input.GetAxisRaw("Horizontal") > 0.4)
         {
             xzMovement += transform.right;
         }
@@ -45,8 +45,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector3(0,rb.velocity.y,0);
         }
-        moveHorizontal = Input.GetAxis("Horizontal");
-        moveVertical = Input.GetAxis("Vertical");
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        moveVertical = Input.GetAxisRaw("Vertical");
         transform.position += xzMovement * Time.deltaTime * movementSpeed;
         xzMovement = new Vector3(0, 0, 0);
     }
