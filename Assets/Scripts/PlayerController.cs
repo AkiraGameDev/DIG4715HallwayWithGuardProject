@@ -9,9 +9,12 @@ public class PlayerController : MonoBehaviour
     public float moveHorizontal;
     public float moveVertical;
 
+    Rigidbody rb;
+
     // Start is called before the first frame update
     void Start()
     {
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -37,6 +40,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey("d"))
         {
             xzMovement += transform.right;
+        }
+        if(xzMovement == new Vector3(0,0,0))
+        {
+            rb.velocity = new Vector3(0,rb.velocity.y,0);
         }
         moveHorizontal = Input.GetAxis("Horizontal");
         moveVertical = Input.GetAxis("Vertical");
