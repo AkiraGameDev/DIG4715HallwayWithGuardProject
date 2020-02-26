@@ -23,7 +23,15 @@ public class enemyVision : MonoBehaviour
         {
             Debug.Log("We made it");
             //TODO: make enemy pursue player
-            enemyAI.PursuePlayer(other.transform);
+            enemyAI.StartPursuingPlayer(other.gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            enemyAI.canSeePlayer = false;
         }
     }
 }
