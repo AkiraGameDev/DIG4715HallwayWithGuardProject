@@ -23,12 +23,14 @@ public class Menu : MonoBehaviour
 
     public void Quit()
     {
+        print("Quit");
         Application.Quit();
     }
     void Update()
     {
         if (Input.GetKeyDown("escape"))
         {
+            print("Quit");
             Application.Quit();
         }
     }
