@@ -16,6 +16,15 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene("Credits");
     }
 
+    public void Restart()
+    {
+        SceneManager.LoadScene("Start");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
     void Update()
     {
         if (Input.GetKeyDown("escape"))
