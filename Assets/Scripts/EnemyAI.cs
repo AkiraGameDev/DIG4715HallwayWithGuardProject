@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 
 public class EnemyAI : MonoBehaviour
@@ -53,11 +54,20 @@ public class EnemyAI : MonoBehaviour
         Debug.Log("wait 1");
         yield return new WaitForSeconds(1);
         
-        agent.speed = 3;
+        agent.speed = 5;
     }
 
     public void PursuePlayer(Transform playerTransform)
     {
         agent.destination = playerTransform.position;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            print("you fell");
+            SceneManager.LoadScene("LoseScene");
+        }
     }
 }
