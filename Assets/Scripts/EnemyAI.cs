@@ -66,7 +66,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            print("you fell");
+            print("ghost got you");
             SceneManager.LoadScene("LoseScene");
         }
     }
