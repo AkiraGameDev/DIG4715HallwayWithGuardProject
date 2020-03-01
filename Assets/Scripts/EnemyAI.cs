@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿    using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -10,6 +10,9 @@ public class EnemyAI : MonoBehaviour
     public Transform[] points;
     private int destPoint = 0;
     private NavMeshAgent agent;
+    private bool isPursuing;
+    private Transform playerTrans;
+    private float pursueTimer;
 
 
     void Start()
@@ -24,8 +27,11 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
 
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        if (!agent.pathPending && agent.remainingDistance < 0.5f && !isPursuing)
             GotoNextPoint();
+        if(isPursuing)
+            Pursue();
+
     }
 
     void GotoNextPoint()
@@ -52,14 +58,32 @@ public class EnemyAI : MonoBehaviour
     {
         agent.speed = 0;
         Debug.Log("wait 1");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0);
         
         agent.speed = 5;
     }
 
     public void PursuePlayer(Transform playerTransform)
     {
-        agent.destination = playerTransform.position;
+        playerTrans = playerTransform;
+        agent.destination = playerTrans.position;
+        isPursuing = true;
+        pursueTimer = 4.0f;
+        if(!GetComponent<AudioSource>().isPlaying)
+            GetComponent<AudioSource>().Play(0);
+    }
+
+    void Pursue()
+    {
+        Debug.Log("pursuing!!!");
+        pursueTimer -= Time.deltaTime;
+        if(pursueTimer <= 0.0f)
+        {
+            Debug.Log("ending pursuit");
+            isPursuing = false;
+            GetComponent<AudioSource>().Stop();
+        }
+        agent.destination = playerTrans.position;
     }
 
     void OnCollisionEnter(Collision col)
