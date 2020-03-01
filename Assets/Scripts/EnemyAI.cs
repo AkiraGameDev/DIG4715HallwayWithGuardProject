@@ -62,9 +62,9 @@ public class EnemyAI : MonoBehaviour
         agent.destination = playerTransform.position;
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision col)
     {
-        if (other.tag == "Player")
+        if (col.gameObject.tag == "Player")
         {
             print("ghost got you");
             SceneManager.LoadScene("LoseScene");
