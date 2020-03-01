@@ -1,5 +1,7 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -13,11 +15,14 @@ public class EnemyAI : MonoBehaviour
     private bool isPursuing;
     private Transform playerTrans;
     private float pursueTimer;
+    private TextMeshPro text;
 
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        text = GetComponentInChildren<TextMeshPro>();
+        text.fontSize = 0;
 
         agent.autoBraking = false;
         destPoint = 1;
@@ -69,6 +74,7 @@ public class EnemyAI : MonoBehaviour
         agent.destination = playerTrans.position;
         isPursuing = true;
         pursueTimer = 4.0f;
+        text.fontSize = 20;
         if(!GetComponent<AudioSource>().isPlaying)
             GetComponent<AudioSource>().Play(0);
     }
@@ -82,6 +88,7 @@ public class EnemyAI : MonoBehaviour
             Debug.Log("ending pursuit");
             isPursuing = false;
             GetComponent<AudioSource>().Stop();
+            text.fontSize = 0;
         }
         agent.destination = playerTrans.position;
     }
