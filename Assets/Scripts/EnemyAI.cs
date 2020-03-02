@@ -61,11 +61,8 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator MyWaitMethod()
     {
-        agent.speed = 0;
         Debug.Log("wait 1");
         yield return new WaitForSeconds(0);
-        
-        agent.speed = 5;
     }
 
     public void PursuePlayer(Transform playerTransform)
@@ -91,14 +88,5 @@ public class EnemyAI : MonoBehaviour
             text.fontSize = 0;
         }
         agent.destination = playerTrans.position;
-    }
-
-    void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            print("ghost got you");
-            SceneManager.LoadScene("LoseScene");
-        }
     }
 }

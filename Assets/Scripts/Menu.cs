@@ -33,5 +33,18 @@ public class Menu : MonoBehaviour
             print("Quit");
             Application.Quit();
         }
+
+        if(Input.GetButtonDown("Menu1"))
+        {
+            Game();
+        }
+        if(Input.GetButtonDown("Menu2"))
+        {
+            Quit();
+        }
+        if(Input.GetButtonDown("Menu3"))
+        {
+            Credits();
+        }
     }
 }

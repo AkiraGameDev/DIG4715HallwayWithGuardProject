@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class enemyVision : MonoBehaviour
 {
@@ -16,13 +17,12 @@ public class enemyVision : MonoBehaviour
         
     }
 
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider col)
     {
-        if (other.tag == "Player")
+        if(col.gameObject.tag == "Player")
         {
-            Debug.Log("We made it");
-            //TODO: make enemy pursue player
-            enemyAI.PursuePlayer(other.transform);
+            enemyAI.PursuePlayer(col.gameObject.transform);
         }
+
     }
 }

@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
+    void Update()
+    {
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
